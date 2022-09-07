@@ -7,6 +7,8 @@
  void banner();
  void main_menu_screen();
  void main_menu();
+ void student_data_clear();
+ void student_data();
  void add_student();
  void search_student();
  void modify_student();

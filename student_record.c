@@ -26,20 +26,23 @@ typedef struct
     char town_city[20];
     char district[20];
     char state[20];
-    char pin[8];
+    char pin[7];
 }address;
 
 typedef struct
 {
     char ID[20];
-    char name[20];
-    char father[20];
-    char mother[20];
+    char name[30];
+    char father[30];
+    char mother[30];
+    char birth_date[11];
     address stu_add;
-    char class[10];
+    char class[16];
     char phone[11];
-    char gender[10];
-} student;
+    char gender[16];
+} candidate;
+
+candidate student;
 
 /***** main function *****/
 
@@ -197,13 +200,128 @@ void main_menu()
     gotoxy(45, 27);printf("Please choose from the above options: ");
 }
 
-//********************************************** main_menu function definition ***************************************************
+//********************************************** student_data_clear function definition ***************************************************
+
+void student_data_clear()
+{
+    strcpy(student.ID, " ");
+    strcpy(student.name, " ");
+    strcpy(student.father, " ");
+    strcpy(student.mother, " ");
+    strcpy(student.birth_date, " ");
+    strcpy(student.class, " ");
+    strcpy(student.phone, " ");
+    strcpy(student.gender, " ");
+    strcpy(student.stu_add.area_village, " ");
+    strcpy(student.stu_add.town_city, " ");
+    strcpy(student.stu_add.district, " ");
+    strcpy(student.stu_add.state, " ");
+    strcpy(student.stu_add.pin, " ");
+}
+
+//********************************************** student_data function definition ***************************************************
+
+void student_data()
+{
+    int x = 30, y = 90;
+    gotoxy(x, 10);printf("1. Student ID    : %s", student.ID);
+    gotoxy(x, 12);printf("2. Student Name  : %s", student.name);
+    gotoxy(x, 14);printf("3. Father's Name : %s", student.father);
+    gotoxy(x, 16);printf("4. Mother's Name : %s", student.mother);
+    gotoxy(x, 18);printf("5. Gender        : %s", student.gender);
+    gotoxy(x, 20);printf("6. Date of Birth : %s", student.birth_date);
+    gotoxy(x, 22);printf("7. Class         : %s", student.class);
+    gotoxy(x, 24);printf("8. Phone Number  : %s", student.phone);
+    textcolor(BGC_YELLOW);
+    gotoxy(92, 10); printf("   9. Current Address    ");
+    textcolor(CC_CLEAR);
+    gotoxy(y, 12);printf("Area / Village : %s", student.stu_add.area_village);
+    gotoxy(y, 14);printf("Town / City    : %s", student.stu_add.town_city);
+    gotoxy(y, 16);printf("District       : %s", student.stu_add.district);
+    gotoxy(y, 18);printf("State          : %s", student.stu_add.state);
+    gotoxy(y, 20);printf("Pin Code       : %s", student.stu_add.pin);
+    textcolor(IRED);
+    gotoxy(y, 24);printf("10. Exit");
+    textcolor(CC_CLEAR);
+}
+
+//********************************************** add_student function definition ***************************************************
 
 void add_student()
 {
-    banner();
-    fflush(stdout);
-    sleep(5);
+    int choice = 0, exit_flag = 0;
+    student_data_clear();
+    FILE *data_file = fopen("student_database.csv", "w");
+    while(exit_flag == 0)
+    {
+	banner();
+        student_data();
+        gotoxy(34, 27);printf("Please choose the field to be added : ");
+        scanf("%d", &choice);
+	gotoxy(34, 27);space(50);
+        switch(choice)
+	{
+	    case 1:
+		gotoxy(34, 27);printf("Please enter Student ID : ");
+		scanf("%10s", student.ID);
+	        break;
+	    case 2:
+		gotoxy(34, 27);printf("Please enter Student's Name : ");
+		//The " %[^\n]" scans everything until a '\n'
+		//The "%*c" tells scanf to scan a character and discard it. Here my character is '\n'.
+		//The "%*c" discard the newline
+		scanf(" %[^\n]%*c", student.name);
+		break;
+	    case 3:
+		gotoxy(34, 27);printf("Please enter Father's Name : ");
+		scanf(" %[^\n]%*c", student.father);
+		break;
+	    case 4:
+		gotoxy(34, 27);printf("Please enter Mother's Name : ");
+		scanf(" %[^\n]%*c", student.mother);
+		break;
+	    case 5:
+		gotoxy(34, 27);printf("Please enter Student's Gender : ");
+		scanf("%10s", student.gender);
+		break;
+	    case 6:
+		gotoxy(34, 27);printf("Please enter Date of Birth in DD/MM/YYYY format : ");
+		scanf("%10s", student.birth_date);
+		break;
+	    case 7:
+		gotoxy(34, 27);printf("Please enter Class : ");
+		scanf("%10s", student.class);
+		break;
+	    case 8:
+		gotoxy(34, 27);printf("Please enter Phone Number : ");
+		scanf("%10s", student.phone);
+		break;
+	    case 9:
+		gotoxy(34, 27);printf("Please enter Area / Village : ");
+		scanf(" %[^\n]%*c", student.stu_add.area_village);
+		gotoxy(34, 28);printf("Please enter Town / City    : ");
+		scanf("%15s", student.stu_add.town_city);
+		gotoxy(34, 29);printf("Please enter District       : ");
+		scanf("%15s", student.stu_add.district);
+		gotoxy(34, 30);printf("Please enter State          : ");
+		scanf(" %[^\n]%*c", student.stu_add.state);
+		gotoxy(34, 31);printf("Please enter Pin Code       : ");
+		scanf("%6s", student.stu_add.pin);
+		break;
+	    case 10:
+		fprintf(data_file, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin);
+		fclose(data_file);
+		exit_flag = 1;
+		break;
+	    default:
+		textcolor(IRED);
+		gotoxy(34, 29);printf("You have chosen the wrong option.");
+		textcolor(CC_CLEAR);
+		fflush(stdout);
+		sleep(3);
+		break;
+	}
+    }
 }
 
 //********************************************** main_menu function definition ***************************************************
