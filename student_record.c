@@ -240,8 +240,11 @@ void student_data()
     gotoxy(y, 16);printf("District       : %s", student.stu_add.district);
     gotoxy(y, 18);printf("State          : %s", student.stu_add.state);
     gotoxy(y, 20);printf("Pin Code       : %s", student.stu_add.pin);
+    textcolor(IGREEN);
+    gotoxy(y, 22);printf("10. Save");
+    textcolor(CC_CLEAR);
     textcolor(IRED);
-    gotoxy(y, 24);printf("10. Exit");
+    gotoxy(y, 24);printf("11. Exit");
     textcolor(CC_CLEAR);
 }
 
@@ -250,10 +253,25 @@ void student_data()
 void add_student()
 {
     int choice = 0, exit_flag = 0;
+    char stu_id[15];
+    FILE *data_file = fopen("student_database.csv", "a+");
+    banner();
+    gotoxy(34, 27);printf("Please enter Student ID : ");
+    scanf("%10s", stu_id);
+    while(fscanf(data_file, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
+    {
+	if(strcmp(stu_id, student.ID) == 0)
+	{
+	    gotoxy(50, 14);printf("Student ID already in use for %s !", student.name);
+	    exit_flag = 1;
+	    fflush(stdout);
+	    sleep(3);
+	}
+    }
     student_data_clear();
-    FILE *data_file = fopen("student_database.csv", "w");
     while(exit_flag == 0)
     {
+	strcpy(student.ID, stu_id);
 	banner();
         student_data();
         gotoxy(34, 27);printf("Please choose the field to be added : ");
@@ -262,8 +280,9 @@ void add_student()
         switch(choice)
 	{
 	    case 1:
-		gotoxy(34, 27);printf("Please enter Student ID : ");
-		scanf("%10s", student.ID);
+		gotoxy(34, 27);printf("Sorry, Student ID is not editable");
+		fflush(stdout);
+		sleep(3);
 	        break;
 	    case 2:
 		gotoxy(34, 27);printf("Please enter Student's Name : ");
@@ -310,6 +329,11 @@ void add_student()
 		break;
 	    case 10:
 		fprintf(data_file, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin);
+		gotoxy(34, 29);printf("Student's data is saved to the database");
+		fflush(stdout);
+		sleep(4);
+		break;
+	    case 11:
 		fclose(data_file);
 		exit_flag = 1;
 		break;
