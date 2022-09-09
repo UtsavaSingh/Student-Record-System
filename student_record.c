@@ -258,7 +258,8 @@ void add_student()
     banner();
     gotoxy(34, 27);printf("Please enter Student ID : ");
     scanf("%10s", stu_id);
-    while(fscanf(data_file, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
+    while((getchar()) != '\n');
+    while(fscanf(data_file, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
     {
 	if(strcmp(stu_id, student.ID) == 0)
 	{
@@ -289,43 +290,55 @@ void add_student()
 		//The " %[^\n]" scans everything until a '\n'
 		//The "%*c" tells scanf to scan a character and discard it. Here my character is '\n'.
 		//The "%*c" discard the newline
-		scanf(" %[^\n]%*c", student.name);
+		scanf(" %[^\n]", student.name);
+	        while((getchar()) != '\n');
 		break;
 	    case 3:
 		gotoxy(34, 27);printf("Please enter Father's Name : ");
-		scanf(" %[^\n]%*c", student.father);
+		scanf(" %[^\n]", student.father);
+	        while((getchar()) != '\n');
 		break;
 	    case 4:
 		gotoxy(34, 27);printf("Please enter Mother's Name : ");
-		scanf(" %[^\n]%*c", student.mother);
+		scanf(" %[^\n]", student.mother);
+	        while((getchar()) != '\n');
 		break;
 	    case 5:
 		gotoxy(34, 27);printf("Please enter Student's Gender : ");
 		scanf("%10s", student.gender);
+	        while((getchar()) != '\n');
 		break;
 	    case 6:
 		gotoxy(34, 27);printf("Please enter Date of Birth in DD/MM/YYYY format : ");
 		scanf("%10s", student.birth_date);
+	        while((getchar()) != '\n');
 		break;
 	    case 7:
 		gotoxy(34, 27);printf("Please enter Class : ");
 		scanf("%10s", student.class);
+	        while((getchar()) != '\n');
 		break;
 	    case 8:
 		gotoxy(34, 27);printf("Please enter Phone Number : ");
 		scanf("%10s", student.phone);
+	        while((getchar()) != '\n');
 		break;
 	    case 9:
 		gotoxy(34, 27);printf("Please enter Area / Village : ");
-		scanf(" %[^\n]%*c", student.stu_add.area_village);
+		scanf(" %[^\n]", student.stu_add.area_village);
+	        while((getchar()) != '\n');
 		gotoxy(34, 28);printf("Please enter Town / City    : ");
 		scanf("%15s", student.stu_add.town_city);
+	        while((getchar()) != '\n');
 		gotoxy(34, 29);printf("Please enter District       : ");
 		scanf("%15s", student.stu_add.district);
+	        while((getchar()) != '\n');
 		gotoxy(34, 30);printf("Please enter State          : ");
-		scanf(" %[^\n]%*c", student.stu_add.state);
+		scanf(" %[^\n]", student.stu_add.state);
+	        while((getchar()) != '\n');
 		gotoxy(34, 31);printf("Please enter Pin Code       : ");
 		scanf("%6s", student.stu_add.pin);
+	        while((getchar()) != '\n');
 		break;
 	    case 10:
 		fprintf(data_file, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin);
@@ -348,11 +361,80 @@ void add_student()
     }
 }
 
-//********************************************** main_menu function definition ***************************************************
+//************************************************* search function definition ********************************************************
+
+void search(int choice, char *data)
+{
+    int found_flag = 0;
+    printf("%d, %s", choice, data);
+    FILE *data_file = fopen("student_database.csv", "a+");
+    while(fscanf(data_file, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
+    {
+	if(strcmp(student.ID, data) == 0)
+	{	
+	    banner();
+	    student_data();
+	    scanf("%d", &found_flag);
+	    found_flag = 1;
+	}
+    }
+	if(found_flag == 0)
+	{
+	    gotoxy(34, 29);printf("No data matched");
+	    while((getchar()) != '\n');
+	    scanf("%d", &found_flag);
+	}
+}
+
+//********************************************** search_student function definition ***************************************************
 
 void search_student()
 {
-    printf("hello");
+    int choice = 0, exit_flag = 0, x = 50, found_flag = 0;
+    char stu_id[15], stu_name[20], stu_father[20], stu_mother[20];
+    //FILE *data_file = fopen("student_database.csv", "r");
+    while(exit_flag == 0)
+    {
+	banner();
+        gotoxy(x, 10);printf("Please choose the below option :");
+        gotoxy(x, 12);printf("Search by :");
+        gotoxy(x, 16);printf("1. Student ID");
+        gotoxy(x, 18);printf("2. Student Name");
+        gotoxy(x, 20);printf("3. Father's Name");
+        gotoxy(x, 22);printf("4. Mother's Name");
+        gotoxy(x, 24);printf("5. Go to previous menu");
+        gotoxy(x, 27);printf("Please choose the field to be searched: ");
+	scanf("%d", &choice);
+	gotoxy(x, 27);space(50);
+        switch(choice)
+	{
+	    case 1:
+		gotoxy(34, 27);printf("Please enter Student's ID : ");
+		scanf(" %10s", stu_id);
+                search(choice, stu_id);
+	        break;
+	    case 2:
+		gotoxy(34, 27);printf("Please enter Student's Name : ");
+		//The " %[^\n]" scans everything until a '\n'
+		//The "%*c" tells scanf to scan a character and discard it. Here my character is '\n'.
+		//The "%*c" discard the newline
+		scanf(" %[^\n]%*c", student.name);
+		break;
+	    case 3:
+		gotoxy(34, 27);printf("Please enter Father's Name : ");
+		scanf(" %[^\n]%*c", student.father);
+		break;
+	    case 4:
+		gotoxy(34, 27);printf("Please enter Mother's Name : ");
+		scanf(" %[^\n]%*c", student.mother);
+		break;
+	    case 5:
+		gotoxy(34, 27);printf("Please enter Student's Gender : ");
+		scanf("%10s", student.gender);
+		break;
+	}
+
+    }
 }
 
 //********************************************** main_menu function definition ***************************************************

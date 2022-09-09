@@ -10,6 +10,7 @@
  void student_data_clear();
  void student_data();
  void add_student();
+ void search(int choice, char *data);
  void search_student();
  void modify_student();
  void gen_marksheet();
