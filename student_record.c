@@ -1,7 +1,7 @@
 /*
  * Name          : Utsava Kumar Singh
  * Date          : 4th september 2022
- * Discription   : Student Record Syatem for a School
+ * Discription   : Student Record System for a School
  */
 
 #include <stdio.h>
@@ -121,7 +121,8 @@ void sign_in()
 	    gotoxy(45, 14);printf("Only %d Chances for entering password remaining", count);
 	}
         gotoxy(55, 18);printf("Password : ");
-        scanf("%s", pass);
+        scanf(" %10s", pass);
+        while((getchar()) != '\n');
         gotoxy(66, 18);printf("**********");
         if(strcmp(pass, password) == 0)
 	{
@@ -260,7 +261,7 @@ void add_student()
     FILE *data_file = fopen("student_database.csv", "a+");
     banner();
     gotoxy(34, 27);printf("Please enter Student ID : ");
-    scanf("%10s", stu_id);
+    scanf(" %10s", stu_id);
     while((getchar()) != '\n');
     while(fscanf(data_file, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
     {
@@ -293,54 +294,54 @@ void add_student()
 		//The " %[^\n]" scans everything until a '\n'
 		//The "%*c" tells scanf to scan a character and discard it. Here my character is '\n'.
 		//The "%*c" discard the newline
-		scanf(" %[^\n]", student.name);
+		scanf(" 29%[^\n]", student.name);
 	        while((getchar()) != '\n');
 		break;
 	    case 3:
 		gotoxy(34, 27);printf("Please enter Father's Name : ");
-		scanf(" %[^\n]", student.father);
+		scanf(" 29%[^\n]", student.father);
 	        while((getchar()) != '\n');
 		break;
 	    case 4:
 		gotoxy(34, 27);printf("Please enter Mother's Name : ");
-		scanf(" %[^\n]", student.mother);
+		scanf(" 29%[^\n]", student.mother);
 	        while((getchar()) != '\n');
 		break;
 	    case 5:
 		gotoxy(34, 27);printf("Please enter Student's Gender : ");
-		scanf("%10s", student.gender);
+		scanf(" %10s", student.gender);
 	        while((getchar()) != '\n');
 		break;
 	    case 6:
 		gotoxy(34, 27);printf("Please enter Date of Birth in DD/MM/YYYY format : ");
-		scanf("%10s", student.birth_date);
+		scanf(" %10s", student.birth_date);
 	        while((getchar()) != '\n');
 		break;
 	    case 7:
 		gotoxy(34, 27);printf("Please enter Class : ");
-		scanf("%10s", student.class);
+		scanf(" %29s", student.class);
 	        while((getchar()) != '\n');
 		break;
 	    case 8:
 		gotoxy(34, 27);printf("Please enter Phone Number : ");
-		scanf("%10s", student.phone);
+		scanf(" %10s", student.phone);
 	        while((getchar()) != '\n');
 		break;
 	    case 9:
 		gotoxy(34, 27);printf("Please enter Area / Village : ");
-		scanf(" %[^\n]", student.stu_add.area_village);
+		scanf(" %29[^\n]", student.stu_add.area_village);
 	        while((getchar()) != '\n');
 		gotoxy(34, 28);printf("Please enter Town / City    : ");
-		scanf("%15s", student.stu_add.town_city);
+		scanf(" %29[^\n]", student.stu_add.town_city);
 	        while((getchar()) != '\n');
 		gotoxy(34, 29);printf("Please enter District       : ");
-		scanf("%15s", student.stu_add.district);
+		scanf(" %29[^\n]", student.stu_add.district);
 	        while((getchar()) != '\n');
 		gotoxy(34, 30);printf("Please enter State          : ");
-		scanf(" %[^\n]", student.stu_add.state);
+		scanf(" %29[^\n]", student.stu_add.state);
 	        while((getchar()) != '\n');
 		gotoxy(34, 31);printf("Please enter Pin Code       : ");
-		scanf("%6s", student.stu_add.pin);
+		scanf(" %6s", student.stu_add.pin);
 	        while((getchar()) != '\n');
 		break;
 	    case 10:
@@ -348,8 +349,6 @@ void add_student()
 		gotoxy(34, 29);printf("Student's data is saved to the database");
 		fflush(stdout);
 		sleep(4);
-		break;
-	    case 11:
 		fclose(data_file);
 		exit_flag = 1;
 		break;
@@ -404,23 +403,23 @@ void id_search(char *data)
     {
 	y = 1;
 	banner();
-	gotoxy(25, 11);printf("=====================================================================================================");
-	gotoxy(35, 12);printf("S. No.");
-   	gotoxy(45, 12);printf("Student ID");
-   	gotoxy(65, 12);printf("Student Name");
-   	gotoxy(85, 12);printf("Father's Name");
-   	gotoxy(105, 12);printf("Mother's Name");
-   	gotoxy(25, 13);printf("=====================================================================================================");
+	gotoxy(15, 11);printf("===========================================================================================================================");
+	gotoxy(20, 12);printf("S. No.");
+   	gotoxy(28, 12);printf("Student ID");
+   	gotoxy(45, 12);printf("Student Name");
+   	gotoxy(80, 12);printf("Father's Name");
+   	gotoxy(120, 12);printf("Mother's Name");
+   	gotoxy(15, 13);printf("===========================================================================================================================");
         data_file = fopen("student_database.csv", "r");
 	while(fscanf(data_file, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
         {
 	    if(strcmp(student.ID, data) == 0)
        	    {
-       	    	gotoxy(35, a);printf("%d", y++);
-   			gotoxy(45, a);printf("%s", student.ID);
-   			gotoxy(65, a);printf("%s", student.name);
-   			gotoxy(85, a);printf("%s", student.father);
-   			gotoxy(105, a);printf("%s", student.mother);	
+       	    	gotoxy(20, a);printf("%d", y++);
+   			gotoxy(28, a);printf("%s", student.ID);
+   			gotoxy(45, a);printf("%s", student.name);
+   			gotoxy(80, a);printf("%s", student.father);
+   			gotoxy(120, a);printf("%s", student.mother);	
 			a++;
 	    }	
         }
@@ -489,23 +488,23 @@ void name_search(char *data)
     {
 	y = 1;
 	banner();
-	gotoxy(25, 11);printf("=====================================================================================================");
-	gotoxy(35, 12);printf("S. No.");
-   	gotoxy(45, 12);printf("Student ID");
-   	gotoxy(65, 12);printf("Student Name");
-   	gotoxy(85, 12);printf("Father's Name");
-   	gotoxy(105, 12);printf("Mother's Name");
-   	gotoxy(25, 13);printf("=====================================================================================================");
+	gotoxy(15, 11);printf("===========================================================================================================================");
+	gotoxy(20, 12);printf("S. No.");
+   	gotoxy(28, 12);printf("Student ID");
+   	gotoxy(45, 12);printf("Student Name");
+   	gotoxy(80, 12);printf("Father's Name");
+   	gotoxy(120, 12);printf("Mother's Name");
+   	gotoxy(15, 13);printf("===========================================================================================================================");
         data_file = fopen("student_database.csv", "r");
 	while(fscanf(data_file, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
         {
 	    if(strcmp(student.name, data) == 0)
        	    {
-       	    	gotoxy(35, a);printf("%d", y++);
-   			gotoxy(45, a);printf("%s", student.ID);
-   			gotoxy(65, a);printf("%s", student.name);
-   			gotoxy(85, a);printf("%s", student.father);
-   			gotoxy(105, a);printf("%s", student.mother);	
+       	    	gotoxy(20, a);printf("%d", y++);
+   			gotoxy(28, a);printf("%s", student.ID);
+   			gotoxy(45, a);printf("%s", student.name);
+   			gotoxy(80, a);printf("%s", student.father);
+   			gotoxy(120, a);printf("%s", student.mother);		
 			a++;
 	    }	
         }
@@ -574,23 +573,23 @@ void father_search(char *data)
     {
 	y = 1;
 	banner();
-	gotoxy(25, 11);printf("=====================================================================================================");
-	gotoxy(35, 12);printf("S. No.");
-   	gotoxy(45, 12);printf("Student ID");
-   	gotoxy(65, 12);printf("Student Name");
-   	gotoxy(85, 12);printf("Father's Name");
-   	gotoxy(105, 12);printf("Mother's Name");
-   	gotoxy(25, 13);printf("=====================================================================================================");
+	gotoxy(15, 11);printf("===========================================================================================================================");
+	gotoxy(20, 12);printf("S. No.");
+   	gotoxy(28, 12);printf("Student ID");
+   	gotoxy(45, 12);printf("Student Name");
+   	gotoxy(80, 12);printf("Father's Name");
+   	gotoxy(120, 12);printf("Mother's Name");
+   	gotoxy(15, 13);printf("===========================================================================================================================");
         data_file = fopen("student_database.csv", "r");
 	while(fscanf(data_file, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
         {
 	    if(strcmp(student.father, data) == 0)
        	    {
-       	    	gotoxy(35, a);printf("%d", y++);
-   			gotoxy(45, a);printf("%s", student.ID);
-   			gotoxy(65, a);printf("%s", student.name);
-   			gotoxy(85, a);printf("%s", student.father);
-   			gotoxy(105, a);printf("%s", student.mother);	
+       	    	gotoxy(20, a);printf("%d", y++);
+   			gotoxy(28, a);printf("%s", student.ID);
+   			gotoxy(45, a);printf("%s", student.name);
+   			gotoxy(80, a);printf("%s", student.father);
+   			gotoxy(120, a);printf("%s", student.mother);		
 			a++;
 	    }	
         }
@@ -638,6 +637,7 @@ void mother_search(char *data)
     if(found_flag == 0)
     {
 	gotoxy(40, 29);printf("No data matched");
+	gotoxy(40, 30);printf("Enter any key to go to the previous menu");
 	scanf("%d", &y);
     }
     else if(found_flag == 1)
@@ -659,24 +659,24 @@ void mother_search(char *data)
     {
 	y = 1;
 	banner();
-	gotoxy(25, 11);printf("=====================================================================================================");
-	gotoxy(35, 12);printf("S. No.");
-   	gotoxy(45, 12);printf("Student ID");
-   	gotoxy(65, 12);printf("Student Name");
-   	gotoxy(85, 12);printf("Father's Name");
-   	gotoxy(105, 12);printf("Mother's Name");
-   	gotoxy(25, 13);printf("=====================================================================================================");
+	gotoxy(15, 11);printf("===========================================================================================================================");
+	gotoxy(20, 12);printf("S. No.");
+   	gotoxy(28, 12);printf("Student ID");
+   	gotoxy(45, 12);printf("Student Name");
+   	gotoxy(80, 12);printf("Father's Name");
+   	gotoxy(120, 12);printf("Mother's Name");
+   	gotoxy(15, 13);printf("===========================================================================================================================");
         data_file = fopen("student_database.csv", "r");
 	while(fscanf(data_file, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
         {
 	    if(strcmp(student.mother, data) == 0)
        	    {
-       	    	gotoxy(35, a);printf("%d", y++);
-   			gotoxy(45, a);printf("%s", student.ID);
-   			gotoxy(65, a);printf("%s", student.name);
-   			gotoxy(85, a);printf("%s", student.father);
-   			gotoxy(105, a);printf("%s", student.mother);	
-			a++;
+       	    	gotoxy(20, a);printf("%d", y++);
+   			gotoxy(28, a);printf("%s", student.ID);
+   			gotoxy(45, a);printf("%s", student.name);
+   			gotoxy(80, a);printf("%s", student.father);
+   			gotoxy(120, a);printf("%s", student.mother);	
+		a++;
 	    }	
         }
 	fclose(data_file);
@@ -708,8 +708,8 @@ void mother_search(char *data)
 
 void search_student()
 {
-    int choice = 0, exit_flag = 0, x = 50, found_flag = 0;
-    char stu_id[15], stu_name[20], stu_father[20], stu_mother[20];
+    int choice = 0, exit_flag = 0, x = 50;
+    char stu_id[15], stu_name[30], stu_father[30], stu_mother[30];
     while(exit_flag == 0)
     {
 	banner();
@@ -733,19 +733,19 @@ void search_student()
 	        break;
 	    case 2:
 		gotoxy(34, 27);printf("Please enter Student's Name : ");
-		scanf(" %[^\n]", stu_name);
+		scanf(" %29[^\n]", stu_name);
 		while((getchar()) != '\n');
 		name_search(stu_name);
 		break;
 	    case 3:
 		gotoxy(34, 27);printf("Please enter Father's Name : ");
-		scanf(" %[^\n]", stu_father);
+		scanf(" %29[^\n]", stu_father);
 		while((getchar()) != '\n');
 		father_search(stu_father);
 		break;
 	    case 4:
 		gotoxy(34, 27);printf("Please enter Mother's Name : ");
-		scanf(" %[^\n]", stu_mother);
+		scanf(" %29[^\n]", stu_mother);
 		while((getchar()) != '\n');
 		mother_search(stu_mother);
 		break;
