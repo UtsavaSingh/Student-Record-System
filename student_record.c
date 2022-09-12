@@ -18,7 +18,7 @@
 #define phone_len "10"
 #define pin_len "6"
 
-char password[] = "utsava";
+char password[11];
 
 typedef struct
 {
@@ -111,6 +111,10 @@ void sign_in()
 {
     char pass[10];
     int exit = 0, count = 3, msg_flag = 0;
+    FILE *pass_file;
+    pass_file = fopen("password.txt", "r");
+    fscanf(pass_file, "%10[^\n]", password);
+    fclose(pass_file);
     while(exit == 0)
     {
 	clrscr();
@@ -244,10 +248,7 @@ void student_data(int flag)
     if(flag == 1)
     {
         textcolor(IGREEN);
-        gotoxy(y, 22);printf("10. Save");
-        textcolor(CC_CLEAR);
-        textcolor(IRED);
-        gotoxy(y, 24);printf("11. Exit");
+        gotoxy(y, 23);printf("10. Save and Exit");
         textcolor(CC_CLEAR);
     }
 }
@@ -789,5 +790,44 @@ void delete_record()
 
 void change_pass()
 {
-    printf("hello");
+    banner();
+    char pass[11], pass1[11], pass2[11];
+    int exit = 0, msg_flag = 0, y;
+    FILE *old, *new;
+    old = fopen("password.txt", "r");
+    new = fopen("new.txt", "w");
+    fscanf(old, "%10[^\n]", password);
+    fclose(old);
+    while(exit == 0)
+    {
+        banner();
+	if(msg_flag == 1)
+	{
+	    gotoxy(45, 12);printf("Wrong Password entered!");
+	    gotoxy(45, 13);printf("Try again!");
+	}
+        gotoxy(50, 16);printf("Please enter the present password : ");
+        scanf(" %10s", pass);
+        while((getchar()) != '\n');
+        if(strcmp(pass, password) == 0)
+	{
+	    gotoxy(45, 18);printf("Please enter the new password : ");
+	    scanf(" %10s", pass1);
+	    gotoxy(45, 20);printf("Please re-enter the new password : ");
+	    scanf(" %10s", pass2);
+	    if(strcmp(pass1, pass2) == 0)
+	    {
+	         fprintf(new, "%s", pass1);
+		 fclose(new);
+		 remove("password.txt");
+		 rename("new.txt", "password.txt");
+	         gotoxy(45, 23);printf("Password changed successfully!");
+	         gotoxy(45, 28);printf("Enter any key to go to the previous menu");
+		 scanf("%d", &y);
+		 exit = 1;
+	    }
+	}
+        else
+	    msg_flag = 1;
+    }
 }
