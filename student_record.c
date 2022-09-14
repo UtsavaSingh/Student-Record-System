@@ -166,15 +166,12 @@ void main_menu_screen()
 		modify_student();
 		break;
 	    case 4:
-		gen_marksheet();
-		break;
-	    case 5:
 		delete_record();
 		break;
-	    case 6:
+	    case 5:
 		change_pass();
 		break;
-	    case 7:
+	    case 6:
 		exit_flag = 1;
 		break;
 	    default:
@@ -197,12 +194,11 @@ void main_menu()
     gotoxy(x, 12);printf("1. Add Student");
     gotoxy(x, 14);printf("2. Search Student");
     gotoxy(x, 16);printf("3. Modify Student Record");
-    gotoxy(x, 18);printf("4. Generate Marksheet");
-    gotoxy(x, 20);printf("5. Delete Student Record");
-    gotoxy(x, 22);printf("6. Change Password");
-    gotoxy(x, 24);printf("7. Sign out");
+    gotoxy(x, 18);printf("4. Delete Student Record");
+    gotoxy(x, 20);printf("5. Change Password");
+    gotoxy(x, 22);printf("6. Sign out");
     textcolor(CC_CLEAR);
-    gotoxy(45, 27);printf("Please choose from the above options: ");
+    gotoxy(45, 25);printf("Please choose from the above options: ");
 }
 
 //********************************************** student_data_clear function definition ***************************************************
@@ -769,131 +765,175 @@ void search_student()
 
 void modify_student()
 {
-    int found_flag = 0, y, choice, exit_flag = 0;
-    char stu_id[11];
+    int found_flag, y, choice, exit_flag;
+    char stu_id[11], flag;
     FILE *old, *new; 
-    old = fopen("student_database.csv", "r");
-    new = fopen("new_database.csv", "w");
-    while(exit_flag == 0)
+
+    do
     {
-    banner();
-    gotoxy(34, 15);printf("Please Enter student ID to edit : ");
-    scanf("%10s", stu_id);
-    while(fscanf(old, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
-    {
-	if(strcmp(student.ID, stu_id) == 0)
-	{	    
-	    banner();
-	    student_data(1);
- 	    gotoxy(34, 27);printf("Please choose the field to edit : ");
-        scanf("%d", &choice);
-	gotoxy(34, 27);space(50);
-        switch(choice)
-	{
-	    case 1:
-		gotoxy(34, 27);printf("Sorry, Student ID is not editable");
-		fflush(stdout);
-		sleep(3);
-	        break;
-	    case 2:
-		gotoxy(34, 27);printf("Please enter new student name : ");
-		scanf(" %29[^\n]", student.name);
-	        while((getchar()) != '\n');
-		break;
-	    case 3:
-		gotoxy(34, 27);printf("Please enter new Father's name : ");
-		scanf(" %29[^\n]", student.father);
-	        while((getchar()) != '\n');
-		break;
-	    case 4:
-		gotoxy(34, 27);printf("Please enter new Mother's name : ");
-		scanf(" %29[^\n]", student.mother);
-	        while((getchar()) != '\n');
-		break;
-	    case 5:
-		gotoxy(34, 27);printf("Please enter Student's Gender : ");
-		scanf(" %10s", student.gender);
-	        while((getchar()) != '\n');
-		break;
-	    case 6:
-		gotoxy(34, 27);printf("Please enter new Date of Birth in DD/MM/YYYY format : ");
-		scanf(" %10s", student.birth_date);
-	        while((getchar()) != '\n');
-		break;
-	    case 7:
-		gotoxy(34, 27);printf("Please enter new Class : ");
-		scanf(" %29s", student.class);
-	        while((getchar()) != '\n');
-		break;
-	    case 8:
-		gotoxy(34, 27);printf("Please enter new Phone Number : ");
-		scanf(" %10s", student.phone);
-	        while((getchar()) != '\n');
-		break;
-	    case 9:
-		gotoxy(34, 27);printf("Please enter new Area / Village : ");
-		scanf(" %29[^\n]", student.stu_add.area_village);
-	        while((getchar()) != '\n');
-		gotoxy(34, 28);printf("Please enter new Town / City    : ");
-		scanf(" %29[^\n]", student.stu_add.town_city);
-	        while((getchar()) != '\n');
-		gotoxy(34, 29);printf("Please enter new District       : ");
-		scanf(" %29[^\n]", student.stu_add.district);
-	        while((getchar()) != '\n');
-		gotoxy(34, 30);printf("Please enter new State          : ");
-		scanf(" %29[^\n]", student.stu_add.state);
-	        while((getchar()) != '\n');
-		gotoxy(34, 31);printf("Please enter new Pin Code       : ");
-		scanf(" %6s", student.stu_add.pin);
-	        while((getchar()) != '\n');
-		break;
-	    case 10:
+	found_flag = 0;
+	exit_flag = 0;
+	old = fopen("student_database.csv", "r");
+        new = fopen("new_database.csv", "w");
+	banner();
+    	gotoxy(34, 15);printf("Please Enter student ID to edit : ");
+    	scanf("%10s", stu_id);
+    	while(fscanf(old, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
+    	{
+	    if(strcmp(student.ID, stu_id) == 0)
+	    {	    
+		while(exit_flag == 0)
+	    	{
+		    banner();
+	    	    student_data(1);
+ 	            gotoxy(34, 27);printf("Please choose the field to edit : ");
+                    scanf("%d", &choice);
+	            gotoxy(34, 27);space(50);
+                    switch(choice)
+	            {
+			case 1:
+			    gotoxy(34, 27);printf("Sorry, Student ID is not editable");
+		            fflush(stdout);
+			    sleep(3);
+	        	    break;
+	    		case 2:
+			    gotoxy(34, 27);printf("Please enter new student name : ");
+			    scanf(" %29[^\n]", student.name);
+	        	    while((getchar()) != '\n');
+			    break;
+	    		case 3:
+			    gotoxy(34, 27);printf("Please enter new Father's name : ");
+			    scanf(" %29[^\n]", student.father);
+	        	    while((getchar()) != '\n');
+			    break;
+	    		case 4:
+			    gotoxy(34, 27);printf("Please enter new Mother's name : ");
+			    scanf(" %29[^\n]", student.mother);
+	        	    while((getchar()) != '\n');
+			    break;
+	    	        case 5:
+			    gotoxy(34, 27);printf("Please enter Student's Gender : ");
+			    scanf(" %10s", student.gender);
+	        	    while((getchar()) != '\n');
+			    break;
+	    		case 6:
+			    gotoxy(34, 27);printf("Please enter new Date of Birth in DD/MM/YYYY format : ");
+			    scanf(" %10s", student.birth_date);
+	        	    while((getchar()) != '\n');
+			    break;
+	    		case 7:
+		    	    gotoxy(34, 27);printf("Please enter new Class : ");
+			    scanf(" %29s", student.class);
+	        	    while((getchar()) != '\n');
+			    break;
+	    		case 8:
+			    gotoxy(34, 27);printf("Please enter new Phone Number : ");
+			    scanf(" %10s", student.phone);
+	        	    while((getchar()) != '\n');
+			    break;
+	    		case 9:
+			    gotoxy(34, 27);printf("Please enter new Area / Village : ");
+			    scanf(" %29[^\n]", student.stu_add.area_village);
+	        	    while((getchar()) != '\n');
+			    gotoxy(34, 28);printf("Please enter new Town / City    : ");
+			    scanf(" %29[^\n]", student.stu_add.town_city);
+	        	    while((getchar()) != '\n');
+			    gotoxy(34, 29);printf("Please enter new District       : ");
+			    scanf(" %29[^\n]", student.stu_add.district);
+	        	    while((getchar()) != '\n');
+			    gotoxy(34, 30);printf("Please enter new State          : ");
+			    scanf(" %29[^\n]", student.stu_add.state);
+	        	    while((getchar()) != '\n');
+			    gotoxy(34, 31);printf("Please enter new Pin Code       : ");
+			    scanf(" %6s", student.stu_add.pin);
+	        	    while((getchar()) != '\n');
+			    break;
+	    		case 10:
+			    fprintf(new, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin);
+			    gotoxy(40, 29);printf("Student's data is updated to the database");
+			    gotoxy(40, 32);printf("Enter 'y' to edit other students data or 'n' to go to main menu : ");
+			    getchar();
+			    scanf("%c", &flag);
+			    while((getchar()) != '\n');
+			    found_flag = 1;
+			    exit_flag = 1;
+			    break;
+	    		default:
+			    textcolor(IRED);
+			    gotoxy(34, 29);printf("You have chosen the wrong option.");
+			    textcolor(CC_CLEAR);
+			    fflush(stdout);
+			    sleep(3);
+			    break;
+		    }
+		}
+	    }
+	    else
+	    {
 		fprintf(new, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin);
-		gotoxy(34, 29);printf("Student's data is updated to the database");
-		fflush(stdout);
-		sleep(4);
-		exit_flag = 1;
-		break;
-	    default:
-		textcolor(IRED);
-		gotoxy(34, 29);printf("You have chosen the wrong option.");
-		textcolor(CC_CLEAR);
-		fflush(stdout);
-		sleep(3);
-		break;
+	    }
 	}
+	if(found_flag == 0)
+    	{
+	    gotoxy(40, 29);printf("No data matched");
+	    gotoxy(40, 32);printf("Enter 'y' to edit other students data or 'n' to go to main menu : ");
+	    getchar();
+	    scanf("%c", &flag);
+	    while((getchar()) != '\n');
 	}
-	else
-	{
-	    fprintf(new, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin);
-	}
-    }
-    fclose(old);
-    fclose(new);
-    remove("student_database.csv");
-    rename("new_database.csv", "student_database.csv");
-        
-    if(found_flag == 0)
-    {
-	gotoxy(40, 29);printf("No data matched");
-	gotoxy(40, 32);printf("Enter any key to search another student");
-	scanf("%d", &y);
-    }
-    }
-}
-
-//********************************************** gen_marksheet function definition ***************************************************
-
-void gen_marksheet()
-{
-    printf("hello");
+	fclose(old);
+    	fclose(new);
+    	remove("student_database.csv");
+    	rename("new_database.csv", "student_database.csv");
+    } while (flag == 'y');
 }
 
 //********************************************** delete_record function definition ***************************************************
 
 void delete_record()
 {
-    printf("hello");
+    int found_flag, y, choice, exit_flag;
+    char stu_id[11], flag;
+    FILE *old, *new; 
+
+    do
+    {
+	found_flag = 0;
+	exit_flag = 0;
+	old = fopen("student_database.csv", "r");
+        new = fopen("new_database.csv", "w");
+	banner();
+    	gotoxy(34, 15);printf("Please Enter student ID to delete : ");
+    	scanf("%10s", stu_id);
+    	while(fscanf(old, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin) != EOF)
+    	{
+	    if(strcmp(student.ID, stu_id) == 0)
+	    {	    
+		banner();
+		student_data(0);
+		gotoxy(40, 29);printf("Student's data is deleted from the database");
+		found_flag = 1;
+		fflush(stdout);
+		sleep(3);
+	    }
+	    else
+	    {
+		fprintf(new, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", student.ID, student.name, student.father, student.mother, student.gender, student.birth_date, student.class, student.phone, student.stu_add.area_village, student.stu_add.town_city, student.stu_add.district, student.stu_add.state, student.stu_add.pin);
+	    }
+	}
+	if(found_flag == 0)
+    	{
+	    gotoxy(40, 29);printf("No data matched");
+	    gotoxy(40, 32);printf("Enter 'y' to delete other students data or 'n' to go to main menu : ");
+	    getchar();
+	    scanf("%c", &flag);
+	    while((getchar()) != '\n');
+	}
+	fclose(old);
+    	fclose(new);
+    	remove("student_database.csv");
+    	rename("new_database.csv", "student_database.csv");
+    } while (flag == 'y');
 }
 
 //********************************************** change_pass function definition ***************************************************
